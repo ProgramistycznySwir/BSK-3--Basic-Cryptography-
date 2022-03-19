@@ -1,6 +1,6 @@
 namespace Main;
 
-public class RailFence
+public class RailFence : IEncryptor
 {
     public int RailCount { get; init; }
     public RailFence(int railCount = 3)
@@ -18,15 +18,15 @@ public class RailFence
 
         Queue<T>[] layers = new Queue<T>[RailCount].Select(e => new Queue<T>()).ToArray();
 
-        var(bounceBack, i) = (false, 0);
+        var(bounceBack, currRail) = (false, 0);
         foreach(T element in sequence)
         {
-            if(i is 0)
+            if(currRail is 0)
                 bounceBack = false;
-            else if(i == RailCount-1)
+            else if(currRail == RailCount-1)
                 bounceBack = true;
-            layers[i].Enqueue(element);
-            i += bounceBack ? -1 : 1;
+            layers[currRail].Enqueue(element);
+            currRail += bounceBack ? -1 : 1;
         }
 
         return layers.SelectMany(e => e);
@@ -34,25 +34,46 @@ public class RailFence
 
     public IEnumerable<T> Decrypt<T>(IEnumerable<T> sequence)
     {
-        if(RailCount == 1)
-            return sequence;
+        List<T>[] lines = Enumerable.Range(0, RailCount).Select(e => new List<T>()).ToArray();
+        int[] lines_Lenght = Enumerable.Repeat(0, RailCount).ToArray();
 
-        int sequenceLenght = sequence.Count();
-        Queue<T> result = new(sequenceLenght);
-        Queue<T>[] layers = new Queue<T>[RailCount].Select(e => new Queue<T>()).ToArray();
-
-        bool bounceBack = false;
-        int i = 0;
+        var(bounceBack, currRail) = (false, 0);
         foreach(T element in sequence)
         {
-            if(i is 0)
+            lines_Lenght[currRail]++;
+
+            if(currRail is 0)
                 bounceBack = false;
-            else if(i == RailCount-1)
+            else if(currRail == RailCount-1)
                 bounceBack = true;
-            layers[i].Enqueue(element);
-            i += bounceBack ? -1 : 1;
+            
+            currRail += bounceBack ? -1 : 1;
         }
-        
-        return layers.SelectMany(e => e);
+
+        using (var enumerator = sequence.GetEnumerator().Init())
+        for (int line = 0; line < RailCount; line++)
+            for (int c = 0; c < lines_Lenght[line]; c++)
+                lines[line].Add(enumerator.PopMoveNext());
+
+        int sequence_Count = sequence.Count(); // Cache
+        List<T> result = new List<T>(sequence_Count);
+        (bounceBack, currRail) = (false, 0);
+
+        var lines_enumerator = lines.Select(e => e.GetEnumerator().Init()).ToArray();
+        for (int i = 0; i < sequence_Count; i++)
+        {
+            result.Add(lines_enumerator[currRail].PopMoveNext());
+
+            if(currRail is 0)
+                bounceBack = false;
+            else if(currRail == RailCount-1)
+                bounceBack = true;
+            
+            currRail += bounceBack ? -1 : 1;
+        }
+        foreach (var enumerator in lines_enumerator)
+            enumerator.Dispose();
+
+        return result.AsEnumerable();
     }
 }
