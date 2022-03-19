@@ -34,6 +34,9 @@ public class RailFence : IEncryptor
 
     public IEnumerable<T> Decrypt<T>(IEnumerable<T> sequence)
     {
+        if(RailCount == 1)
+            return sequence;
+        
         List<T>[] lines = Enumerable.Range(0, RailCount).Select(e => new List<T>()).ToArray();
         int[] lines_Lenght = Enumerable.Repeat(0, RailCount).ToArray();
 

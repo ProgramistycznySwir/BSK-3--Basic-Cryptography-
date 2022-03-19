@@ -5,10 +5,6 @@ namespace Main;
 
 public class RailFence_Tests
 {
-    // public int RailCount { get; init; }
-    // public RailFence_Tests(int railCount = 3)
-    //     => (RailCount) = (railCount);
-    
     [Theory]
     [InlineData("CRYPTOGRAPHY", "CTARPORPYYGH", 3)]
     [InlineData("ABCDEFGHIJKLMNOPRSTUWVXYZ", "AEIMRWZBDFHJLNPSUVYCGKOTX", 3)]
@@ -38,49 +34,4 @@ public class RailFence_Tests
         string decryptedWord = encryptorOutput.CollectString();
         Assert.Equal(decryptedWord_expected, decryptedWord);
     }
-
-    // public IEnumerable<T> Encrypt<T>(IEnumerable<T> sequence)
-    // {
-    //     if(RailCount == 1)
-    //         return sequence;
-
-    //     Queue<T>[] layers = new Queue<T>[RailCount].Select(e => new Queue<T>()).ToArray();
-
-    //     var(bounceBack, i) = (false, 0);
-    //     foreach(T element in sequence)
-    //     {
-    //         if(i is 0)
-    //             bounceBack = false;
-    //         else if(i == RailCount-1)
-    //             bounceBack = true;
-    //         layers[i].Enqueue(element);
-    //         i += bounceBack ? -1 : 1;
-    //     }
-
-    //     return layers.SelectMany(e => e);
-    // }
-
-    // public IEnumerable<T> Decrypt<T>(IEnumerable<T> sequence)
-    // {
-    //     if(RailCount == 1)
-    //         return sequence;
-
-    //     int sequenceLenght = sequence.Count();
-    //     Queue<T> result = new(sequenceLenght);
-    //     Queue<T>[] layers = new Queue<T>[RailCount].Select(e => new Queue<T>()).ToArray();
-
-    //     bool bounceBack = false;
-    //     int i = 0;
-    //     foreach(T element in sequence)
-    //     {
-    //         if(i is 0)
-    //             bounceBack = false;
-    //         else if(i == RailCount-1)
-    //             bounceBack = true;
-    //         layers[i].Enqueue(element);
-    //         i += bounceBack ? -1 : 1;
-    //     }
-        
-    //     return layers.SelectMany(e => e);
-    // }
 }
