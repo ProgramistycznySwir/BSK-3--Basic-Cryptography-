@@ -7,9 +7,9 @@ namespace Main;
 public interface IEncryptor : IStringEncryptor
 {
     public new string Encrypt(string word)
-        => Encrypt(word).CollectString();
+        => Encrypt(word.AsEnumerable()).CollectString();
     public new string Decrypt(string word)
-        => Encrypt(word).CollectString();
+        => Decrypt(word.AsEnumerable()).CollectString();
     
     public IEnumerable<T> Encrypt<T>(IEnumerable<T> sequence);
     public IEnumerable<T> Decrypt<T>(IEnumerable<T> sequence);

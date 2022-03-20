@@ -11,12 +11,10 @@ public class RailFence_Tests
     public void WordEncryption(string word, string encryptedWord_expected, int railCount)
     {
         // Arrange:
-        IEncryptor encryptor = new RailFence(railCount: railCount);
+        RailFence encryptor = new(railCount: railCount);
         // Act:
-        IEnumerable<char> encryptorOutput = encryptor.Encrypt(word);
+        string encryptedWord = encryptor.Encrypt(word);
         // Assert:
-        Assert.NotNull(encryptorOutput);
-        string encryptedWord = encryptorOutput.CollectString();
         Assert.Equal(encryptedWord_expected, encryptedWord);
     }
 
@@ -26,12 +24,10 @@ public class RailFence_Tests
     public void WordDecryption(string word, string decryptedWord_expected, int railCount)
     {
         // Arrange:
-        IEncryptor encryptor = new RailFence(railCount: railCount);
+        RailFence encryptor = new(railCount: railCount);
         // Act:
-        IEnumerable<char> encryptorOutput = encryptor.Decrypt(word);
+        string decryptedWord = encryptor.Decrypt(word);
         // Assert:
-        Assert.NotNull(encryptorOutput);
-        string decryptedWord = encryptorOutput.CollectString();
         Assert.Equal(decryptedWord_expected, decryptedWord);
     }
 }

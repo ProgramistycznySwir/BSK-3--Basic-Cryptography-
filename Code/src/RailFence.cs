@@ -1,15 +1,20 @@
 namespace Main;
 
+/// <summary>
+/// Zadanie 1
+/// </summary>
 public class RailFence : IEncryptor
 {
+    public const int Default_RailCount = 3;
+    
     public int RailCount { get; init; }
-    public RailFence(int railCount = 3)
+    public RailFence(int railCount = Default_RailCount)
         => (RailCount) = (railCount);
     
     public string Encrypt(string word)
-        => Encrypt(word).CollectString();
+        => Encrypt(word.AsEnumerable()).CollectString();
     public string Decrypt(string word)
-        => Encrypt(word).CollectString();
+        => Decrypt(word.AsEnumerable()).CollectString();
 
     // Performance:
     //  Time: O(n)

@@ -1,11 +1,16 @@
 namespace Main;
 
+/// <summary>
+/// Zadanie 2
+/// </summary>
 public class MatrixShift : IEncryptor
 {
+    public static readonly int[] Default_Key = new int[] { 3, 1, 4, 2 };
+
     public int[] Key { get; init; }
     public int[] NormalizedKey { get; init; }
     public MatrixShift(int[]? key = null){
-        Key = key ?? new int[] { 3, 1, 4, 2 };
+        Key = key ?? Default_Key;
         NormalizedKey = Key.Select(e => e-1).ToArray();
     }
     
@@ -21,9 +26,9 @@ public class MatrixShift : IEncryptor
     }
     
     public string Encrypt(string word)
-        => Encrypt(word).CollectString();
+        => Encrypt(word.AsEnumerable()).CollectString();
     public string Decrypt(string word)
-        => Encrypt(word).CollectString();
+        => Decrypt(word.AsEnumerable()).CollectString();
 
     public IEnumerable<T> Encrypt<T>(IEnumerable<T> sequence)
         => Hash(sequence, NormalizedKey);
