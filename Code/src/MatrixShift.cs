@@ -20,100 +20,23 @@ public class MatrixShift : IEncryptor
         return result;
     }
 
-    // TODO: Encrypt and decrypt look similar, you can join them.
     public IEnumerable<T> Encrypt<T>(IEnumerable<T> sequence)
-    {
-        return Hash(sequence, NormalizedKey);
-        if(Key.Length is 1)
-            return sequence;
-
-        T[] buffer = new T[Key.Length];
-
-        int sequence_Count = sequence.Count();
-        var result = new List<T>(sequence_Count);
-
-        int[] inversedKey = InverseKey(NormalizedKey).ToArray();
-
-        int i = 0;
-        foreach(T element in sequence)
-        {
-            buffer[inversedKey[i]] = element;
-            i++;
-            if(i == Key.Length)
-            {
-                i = 0;
-                result.AddRange(buffer);
-            }
-        }
-        if(i is not 0) // If buffer is not empty. (i states number of elements in buffer)
-            for(int ii = 0; ii < Key.Length; ii++) 
-                if(NormalizedKey[ii] < i) // Skip if key literal is bigger than buffer elements.
-                    result.Add(buffer[ii]);
-
-        return result.AsEnumerable();
-    }
+        => Hash(sequence, NormalizedKey);
 
     public IEnumerable<T> Decrypt<T>(IEnumerable<T> sequence)
-    {
-        return Hash(sequence, NormalizedKey, reverse: true);
-        if(Key.Length is 1)
-            return sequence;
+        => Hash(sequence, NormalizedKey, reverse: true);
 
-        T[] buffer = new T[Key.Length];
-
-        int sequence_Count = sequence.Count();
-        var result = new List<T>(sequence_Count);
-
-        int[] inversedKey = InverseKey(NormalizedKey).ToArray();
-
-        int bufferIndex = 0;
-        foreach(T element in sequence)
-        {
-            buffer[NormalizedKey[bufferIndex]] = element;
-            bufferIndex++;
-            if(bufferIndex == Key.Length)
-            {
-                bufferIndex = 0;
-                result.AddRange(buffer);
-            }
-        }
-
-        // TODO: I don't know why, but the encryption only breaks in last buffer.
-        if(bufferIndex is not 0) // If buffer is not empty. (i states number of elements in buffer)
-        {
-            // If buffer is not empty we have to do last pass little different.
-            //  I've decided to revert last loop instead of modyfing loop logic.
-            var temp = new T[Key.Length];
-            for(int i0 = 0, i1 = 0; i0 < Key.Length; i0++)
-            {
-                if(NormalizedKey[i0] >= bufferIndex)
-                    continue;
-
-                temp[i0] = buffer[NormalizedKey[i1]];
-                i1++;
-            }
-            for(int i0 = 0; i0 < Key.Length; i0++)
-                buffer[NormalizedKey[i0]] = temp[i0];
-
-            for(int ii = 0; ii < bufferIndex; ii++)
-                result.Add(buffer[ii]);
-
-        }
-
-        return result.AsEnumerable();
-    }
-
+    // Since MatrixShift is only series manipulation, we could easily invert it by inverting the key, and bool at the
+    //  end is doing that for us. Look out for use of reverse flag to seek differences between encryption and decryption.
     public static IEnumerable<T> Hash<T>(IEnumerable<T> sequence, int[] key, bool reverse = false)
     {
         if(key.Length is 1)
             return sequence;
 
-        T[] buffer = new T[key.Length];
-        int sequence_Count = sequence.Count();
-        var result = new List<T>(sequence_Count);
-
+        List<T> result = new List<T>(sequence.Count());
         int[] inversedKey = InverseKey(key).ToArray();
 
+        T[] buffer = new T[key.Length];
         int bufferIndex = 0;
         foreach(T element in sequence)
         {
@@ -125,28 +48,38 @@ public class MatrixShift : IEncryptor
                 result.AddRange(buffer);
             }
         }
+        // After normal pass of the algorithm we have to collect last incomplete segment:
         if(bufferIndex is not 0) // If buffer is not empty. (i states number of elements in buffer)
         {
-            if(reverse is false)
+            if(reverse is false) // Encrypt
             {
                 for(int ii = 0; ii < key.Length; ii++) 
                     if(key[ii] < bufferIndex) // Skip if key literal is bigger than buffer elements.
                         result.Add(buffer[ii]);
             }
-            else
+            // If we want to reverse encryption we have to:
+            // Important bit about this whole operation is that the last sequence is often encrypted in a way:
+            //  ABCX -(3,1,4,2)> CAXB - where X is just empty element, null.
+            //  But in output sequence elements are collected to something like this CAB and we lose information about X.
+            //  When we decrypt this sequence we get CABX -(inverse(3,1,4,2))> BCXA => BCA - no bueno.
+            //  In step 1 we have to revert last shift inserting X into correct place, we do this by skipping iterations
+            //   where key element is greater than last sequence lenght.
+            else // Decrypt
             {
+                // 1. Revert shift in last segment.
                 var temp = new T[key.Length];
                 for(int i0 = 0, i1 = 0; i0 < key.Length; i0++)
                 {
-                    if(key[i0] >= bufferIndex)
+                    if(key[i0] >= bufferIndex) // 1.1. Most important bit is this part.
                         continue;
 
                     temp[i0] = buffer[key[i1]];
                     i1++;
                 }
+                // 2. We have to redo shift, now with elements in correct places.
                 for(int i0 = 0; i0 < key.Length; i0++)
                     buffer[key[i0]] = temp[i0];
-
+                // 3. Voila, now we just add elements
                 for(int i2 = 0; i2 < bufferIndex; i2++)
                     result.Add(buffer[i2]);
             }
