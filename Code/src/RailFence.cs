@@ -6,6 +6,11 @@ public class RailFence : IEncryptor
     public RailFence(int railCount = 3)
         => (RailCount) = (railCount);
     
+    public string Encrypt(string word)
+        => Encrypt(word).CollectString();
+    public string Decrypt(string word)
+        => Encrypt(word).CollectString();
+
     // Performance:
     //  Time: O(n)
     //  Space: n

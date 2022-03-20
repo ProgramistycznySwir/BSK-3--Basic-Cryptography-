@@ -19,6 +19,11 @@ public class MatrixShift : IEncryptor
             result[key[i]] = i;
         return result;
     }
+    
+    public string Encrypt(string word)
+        => Encrypt(word).CollectString();
+    public string Decrypt(string word)
+        => Encrypt(word).CollectString();
 
     public IEnumerable<T> Encrypt<T>(IEnumerable<T> sequence)
         => Hash(sequence, NormalizedKey);
