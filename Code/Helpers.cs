@@ -37,3 +37,16 @@ internal static class IEnumerable_Ext
     public static string CollectString(this IEnumerable<char> self)
         => new string(self.Select(x => x).ToArray());
 }
+
+internal static class MyMath
+{
+    /// <summary>
+    /// Modulo function that returns value in range 0-[mod]
+    /// </summary>
+    public static int ClampMod(int value, int mod)
+    {
+        value %= mod;
+        value += value < 0 ? mod : 0;
+        return value;
+    }
+}

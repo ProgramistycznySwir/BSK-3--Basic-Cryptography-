@@ -9,10 +9,11 @@ public class CaesarCipher : IStringEncryptor
     public const int Default_Key = 3;
     public const string Default_Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     
+    public int Key { get; init; }
+
     public string Alphabet { get; init; }
     public Dictionary<char, int> Alphabet_Dict { get; init; }
 
-    public int Key { get; init; }
     public CaesarCipher(int key = Default_Key, string alphabet = Default_Alphabet)
     {
         (Key, Alphabet) = (key, alphabet);
@@ -38,9 +39,5 @@ public class CaesarCipher : IStringEncryptor
     }
 
     public char ShiftLetter(char letter, int shift)
-    {
-        int index = (Alphabet_Dict[letter] + shift) % Alphabet.Length;
-        index = index < 0 ? index + Alphabet.Length : index;
-        return Alphabet[index];
-    }
+        => Alphabet[MyMath.ClampMod(Alphabet_Dict[letter] + shift, mod: Alphabet.Length)];
 }
