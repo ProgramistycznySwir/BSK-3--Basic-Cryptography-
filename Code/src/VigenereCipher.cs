@@ -4,7 +4,6 @@ namespace Main;
 /// <summary>
 /// Zadanie 4
 /// </summary>
-/// TODO: Make it work.
 public class VigenereCipher : IStringEncryptor
 {
     public const string Default_Key = "BREAKBREAKBR";
@@ -44,11 +43,11 @@ public class VigenereCipher : IStringEncryptor
     {
         if (Alphabet_Dict.ContainsKey(letter) is false)
             return letter;
-
+        
         int index = Alphabet_Dict[letter];
         index += revert is false ? Alphabet_Dict[key] : -Alphabet_Dict[key];
-        index = Math.Clamp(index, 0, Alphabet.Length - 1);
-        
+        index = MyMath.ClampMod(index, Alphabet.Length);
+
         return Alphabet[index];
     }
 }
