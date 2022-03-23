@@ -46,9 +46,11 @@ public class MatrixShift_Tests
 
     // Nie wiem dlaczego, ale sprawdzarka na stronie [http://testowaniealgorytmow2021.site] działa w jakiś inny sposób
     //  niż instrukcja, może to ja opieram się na jakiś błędnych założeniach, ale wydaje mi się, że to ona się myli.
+    // Dopisek 23.03.2022: Jak teraz sprawdziłem sprawdzarkę, to działa prawidłowo, zostawiłem zakomentowany stary case.
     [Theory]
-    [InlineData("CRYPTOGRAPHYOSA", "RPOYGCTAHOPSRYA", new int[] { 3, 1, 4, 2 })]
-    // [InlineData("ABCDEFGHIJKLMNOPRSTUWVXYZ", "AEIMRWZBDFHJLNPSUVYCGKOTX", new int[] { 3, 1, 4, 2 })]
+    // [InlineData("CRYPTOGRAPHYOSA", "RPOYGCTAHOPSRYA", new int[] { 3, 1, 4, 2 })] // Stary case.
+    [InlineData("CRYPTOGRAPHYOSA", "YCPRGTROHAYPAOS", new int[] { 3, 1, 4, 2 })]
+    [InlineData("CRYPTOGRAPHYOSA", "YPCTRRAOPGOSHAY", new int[] { 3, 4, 1, 5, 2 })]
     public void WordEncryption_ZeSprawdzarki(string word, string encryptedWord_expected, int[] key)
     {
         // Arrange:
