@@ -25,3 +25,14 @@ Console.WriteLine(Zad2_1_word_encrypted);
 string Zad2_1_word_encrypted_decrypted = new MatrixShift(key: Zad2_0_key).Decrypt(Zad2_1_word_encrypted);
 Console.WriteLine(Zad2_1_word_encrypted_decrypted);
 
+
+/// Zad 3 - PRZESTAWIENIA MACIERZOWE 2
+// string Zad3_word = "ABCDEFGHIJKLMNOPRSTUWVXYZ";
+string Zad3_word = "ABCDEFG";
+string Zad3_key = "ROSHAR";
+
+string Zad3_word_encrypted = new MatrixShift2(key: Zad3_key).Encrypt(Zad3_word);
+Console.WriteLine(Zad3_word_encrypted);
+string Zad3_word_encrypted_decrypted = new MatrixShift2(key: Zad3_key).Decrypt(Zad3_word_encrypted);
+Console.WriteLine(Zad3_word_encrypted_decrypted);
+
