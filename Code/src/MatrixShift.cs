@@ -97,4 +97,22 @@ public class MatrixShift : IEncryptor
 
         return result.AsEnumerable();
     }
+
+    public static (bool IsSome, string ErrorMessage) TryParseKey(string rawKey, out int[] key)
+    {
+        var rawKey_array = rawKey.Split('-');
+        key = new int[rawKey_array.Length];
+        for (int i = 0; i < rawKey_array.Length; i++)
+        {
+            string? rawLiteral = rawKey_array[i];
+            // var literal;
+            if (int.TryParse(rawLiteral, out var literal) is false)
+                return (false, $"Literal {rawLiteral} cannot be parsed.");
+            if (key.Contains(literal))
+                return (false, $"Literal {literal} is repeated.");
+            
+            key[i] = literal;
+        }
+        return (true, "");
+    }
 }

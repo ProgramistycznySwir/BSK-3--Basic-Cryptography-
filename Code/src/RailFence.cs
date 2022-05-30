@@ -23,27 +23,35 @@ public class RailFence : IEncryptor
     //      n is sequence.Lenght
     public IEnumerable<T> Encrypt<T>(IEnumerable<T> sequence)
     {
+        // Jeśli jest tylko jedna szyna od razu zwróć input.
         if(RailCount == 1)
             return sequence;
 
+        // Deklaracji i inicjalizacja szyn.
         Queue<T>[] layers = new Queue<T>[RailCount].Select(e => new Queue<T>()).ToArray();
 
+        // Deklaracja zmiennych używanych w iteracji przez sekwencję.
         var(bounceBack, currRail) = (false, 0);
         foreach(T element in sequence)
         {
+            // Algorytm w currRail przechowuje do której szyny ma zapisać dany element, poniższy blok służy do "odbijania"
+            //  tej zmiennej pomiędzy 0 i RailCount.
             if(currRail is 0)
                 bounceBack = false;
             else if(currRail == RailCount-1)
                 bounceBack = true;
+            // Umieszczanie elementu na szynie.
             layers[currRail].Enqueue(element);
             currRail += bounceBack ? -1 : 1;
         }
 
+        // Zebranie wszystkich szyn do jednej kolekcji. W innych językach to powinno być .reduce().
         return layers.SelectMany(e => e);
     }
 
     public IEnumerable<T> Decrypt<T>(IEnumerable<T> sequence)
     {
+        // Jeśli jest tylko jedna szyna od razu zwróć input.
         if(RailCount == 1)
             return sequence;
         
