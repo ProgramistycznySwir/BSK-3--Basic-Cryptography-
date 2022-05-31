@@ -1,4 +1,4 @@
-
+/// Plik zawierający przydatne funkcje.
 
 internal static class IEnumerator_Ext
 {

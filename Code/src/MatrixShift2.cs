@@ -64,4 +64,12 @@ public class MatrixShift2 : IStringEncryptor
                 result.Enqueue(column.Dequeue());
             }
     }
+
+    public static (bool IsSome, string ErrorMessage) TryParseKey(string rawKey, out string key)
+    {
+        // In fact key could be any comparable set of objects, but exercise does not specify if we have to make it soo robust.
+        // Normalize key.
+        key = rawKey.ToUpper();
+        return (true, "");
+    }
 }
