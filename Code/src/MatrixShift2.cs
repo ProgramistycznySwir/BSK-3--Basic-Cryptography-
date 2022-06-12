@@ -16,7 +16,7 @@ public class MatrixShift2 : IStringEncryptor
     
     public string Encrypt(string word)
     {
-        word = string.Join("", word.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+        word = word.Replace(" ", "");
         
         int queueLenght = (int) Math.Ceiling((float)word.Length / Key.Length);
         (Queue<char> column, char keyLiteral)[] matrix = new Queue<char>[Key.Length]
@@ -27,16 +27,27 @@ public class MatrixShift2 : IStringEncryptor
         for(int i = 0; i < word.Length; i++)
             matrix[i%matrix.Length].column.Enqueue(word[i]);
 
-        return string.Join(' ', matrix.OrderBy(e => e.keyLiteral).Select(e => e.column.CollectString()));
+        return string.Join("", matrix.OrderBy(e => e.keyLiteral).Select(e => e.column.CollectString()));
     }
     
     public string Decrypt(string word)
     {
         // Prepare input for organizing.
-        LinkedList<(char, Queue<char>)> rawMatrix = new(
-                Key.OrderBy(e => e)
-                .Zip(word.Split(' ').Select(e => new Queue<char>(e))));
+        List<(char Literal, int Lenght)> Key_lenghts = new(Key.Length);
+        for(int i = 0; i < Key.Length; i++)
+            Key_lenghts.Add((Key[i], (int) Math.Ceiling((float)(word.Length - i) / Key.Length)));
+        int debug = 0;
+        Key_lenghts = Key_lenghts.OrderBy(e => e.Literal).ToList();
 
+        LinkedList<(char, Queue<char>)> rawMatrix = new();
+        int lenghtUntilNow = 0;
+        foreach(var pair in Key_lenghts)
+        {
+            int lenght = pair.Lenght;
+            rawMatrix.AddLast((pair.Literal, new Queue<char>(word[lenghtUntilNow..(lenghtUntilNow+lenght)])));
+            lenghtUntilNow += lenght;
+        }
+        
         // Now we have to place matrix columns in order defined by key.
         Queue<Queue<char>> matrix = new();
         foreach(var keyLiteral in Key)
