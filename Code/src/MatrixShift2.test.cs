@@ -6,6 +6,9 @@ namespace Main;
 public class MatrixShift2_Tests
 {
     [Theory]
+    [InlineData("LETNIPONIEDZIALEK",
+            "LZEIENDOTAPKIEINL",
+            "CONVENIENCE")]
     [InlineData("SLONECZNYCZERWIEC",
             "SECEENZZOWCCYLRNI",
             "CONVENIENCE")]
@@ -23,6 +26,9 @@ public class MatrixShift2_Tests
     }
 
     [Theory]
+    [InlineData("LZEIENDOTAPKIEINL",
+            "LETNIPONIEDZIALEK",
+            "CONVENIENCE")]
     [InlineData("SECEENZZOWCCYLRNI",
             "SLONECZNYCZERWIEC",
             "CONVENIENCE")]

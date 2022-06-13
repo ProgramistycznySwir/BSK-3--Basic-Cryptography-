@@ -36,7 +36,6 @@ public class MatrixShift2 : IStringEncryptor
         List<(char Literal, int Lenght)> Key_lenghts = new(Key.Length);
         for(int i = 0; i < Key.Length; i++)
             Key_lenghts.Add((Key[i], (int) Math.Ceiling((float)(word.Length - i) / Key.Length)));
-        int debug = 0;
         Key_lenghts = Key_lenghts.OrderBy(e => e.Literal).ToList();
 
         LinkedList<(char, Queue<char>)> rawMatrix = new();
@@ -53,6 +52,7 @@ public class MatrixShift2 : IStringEncryptor
         foreach(var keyLiteral in Key)
         {
             var node = rawMatrix.First;
+            
             while(node is not null)
             {
                 if (node.Value.Item1 == keyLiteral)
