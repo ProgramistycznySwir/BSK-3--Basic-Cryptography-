@@ -6,8 +6,14 @@ namespace Main;
 public class MatrixShift2_Tests
 {
     [Theory]
+    [InlineData("LETNIPONIEDZIALEK",
+            "LZEIENDOTAPKIEINL",
+            "CONVENIENCE")]
+    [InlineData("SLONECZNYCZERWIEC",
+            "SECEENZZOWCCYLRNI",
+            "CONVENIENCE")]
     [InlineData("HERE IS A SECRET MESSAGE ENCIPHERED BY TRANSPOSITION",
-            "HECRN CEYI ISEP SGDI RNTO AAES RMPN SSRO EEBT ETIA EEHS",
+            "HECRNCEYIISEPSGDIRNTOAAESRMPNSSROEEBTETIAEEHS",
             "CONVENIENCE")]
     public void WordEncryption(string word, string encryptedWord_expected, string key)
     {
@@ -20,7 +26,13 @@ public class MatrixShift2_Tests
     }
 
     [Theory]
-    [InlineData("HECRN CEYI ISEP SGDI RNTO AAES RMPN SSRO EEBT ETIA EEHS",
+    [InlineData("LZEIENDOTAPKIEINL",
+            "LETNIPONIEDZIALEK",
+            "CONVENIENCE")]
+    [InlineData("SECEENZZOWCCYLRNI",
+            "SLONECZNYCZERWIEC",
+            "CONVENIENCE")]
+    [InlineData("HECRNCEYIISEPSGDIRNTOAAESRMPNSSROEEBTETIAEEHS",
             "HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITION",
             "CONVENIENCE")]
     public void WordDecryption(string word, string decryptedWord_expected, string key)

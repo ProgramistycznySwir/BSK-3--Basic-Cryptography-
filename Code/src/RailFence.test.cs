@@ -6,6 +6,8 @@ namespace Main;
 public class RailFence_Tests
 {
     [Theory]
+    [InlineData("LETNIPONIEDZIALEK", "LIIIKENPNEZAETODL", 3)]
+    [InlineData("SLONECZNYCZERWIEC", "SEYRCLNCNCEWEOZZI", 3)]
     [InlineData("CRYPTOGRAPHY", "CTARPORPYYGH", 3)]
     [InlineData("ABCDEFGHIJKLMNOPRSTUWVXYZ", "AEIMRWZBDFHJLNPSUVYCGKOTX", 3)]
     public void WordEncryption(string word, string encryptedWord_expected, int railCount)
@@ -19,6 +21,8 @@ public class RailFence_Tests
     }
 
     [Theory]
+    [InlineData("LIIIKENPNEZAETODL", "LETNIPONIEDZIALEK", 3)]
+    [InlineData("SEYRCLNCNCEWEOZZI", "SLONECZNYCZERWIEC", 3)]
     [InlineData("CTARPORPYYGH", "CRYPTOGRAPHY", 3)]
     [InlineData("AEIMRWZBDFHJLNPSUVYCGKOTX", "ABCDEFGHIJKLMNOPRSTUWVXYZ", 3)]
     public void WordDecryption(string word, string decryptedWord_expected, int railCount)

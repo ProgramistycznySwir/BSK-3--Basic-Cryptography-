@@ -6,6 +6,8 @@ namespace Main;
 public class MatrixShift_Tests
 {
     [Theory]
+    [InlineData("LETNIPONIEDZIALEK", "TNLIENIPEOIADLZEK", new int[] { 3, 4, 1, 5, 2 })]
+    [InlineData("SLONECZNYCZERWIEC", "ONSELNYCCZRWZIEEC", new int[] { 3, 4, 1, 5, 2 })]
     [InlineData("CRYPTOGRAPHYOSA", "YCPRGTROHAYPAOS", new int[] { 3, 1, 4, 2 })]
     public void WordEncryption(string word, string encryptedWord_expected, int[] key)
     {
@@ -18,6 +20,8 @@ public class MatrixShift_Tests
     }
 
     [Theory]
+    [InlineData("TNLIENIPEOIADLZEK", "LETNIPONIEDZIALEK", new int[] { 3, 4, 1, 5, 2 })]
+    [InlineData("ONSELNYCCZRWZIEEC", "SLONECZNYCZERWIEC", new int[] { 3, 4, 1, 5, 2 })]
     [InlineData("YCPRGTROHAYPAOS", "CRYPTOGRAPHYOSA", new int[] { 3, 1, 4, 2 })]
     public void WordDecryption(string word, string decryptedWord_expected, int[] key)
     {
